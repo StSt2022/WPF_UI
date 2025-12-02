@@ -1,0 +1,118 @@
+<Window x:Class="Regard3D.PropertiesWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Regard3D"
+        mc:Ignorable="d"
+        Title="Regard3D properties" Height="480" Width="600"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        Background="WhiteSmoke"
+        FontSize="14">
+
+	<Window.Resources>
+		<Style TargetType="TextBox">
+			<Setter Property="MinHeight" Value="30"/>
+			<Setter Property="VerticalContentAlignment" Value="Center"/>
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="TextBox">
+						<Grid>
+							<Border x:Name="border" BorderBrush="#ABADB3" BorderThickness="1" Background="White" CornerRadius="2"/>
+							<ScrollViewer x:Name="PART_ContentHost" Margin="4,0"/>
+							<TextBlock x:Name="Placeholder" Text="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}"
+                                       Foreground="Gray" Margin="6,0" VerticalAlignment="Center"
+                                       Visibility="Collapsed" IsHitTestVisible="False"/>
+						</Grid>
+						<ControlTemplate.Triggers>
+							<MultiTrigger>
+								<MultiTrigger.Conditions>
+									<Condition Property="Text" Value=""/>
+								</MultiTrigger.Conditions>
+								<Setter TargetName="Placeholder" Property="Visibility" Value="Visible"/>
+							</MultiTrigger>
+						</ControlTemplate.Triggers>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+
+		<Style x:Key="CustomGroupBoxStyle" TargetType="GroupBox">
+			<Setter Property="BorderBrush" Value="#D0D0D0"/>
+			<Setter Property="BorderThickness" Value="1"/>
+			<Setter Property="Padding" Value="15"/>
+			<Setter Property="Margin" Value="0,15,0,0"/>
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="GroupBox">
+						<Grid>
+							<Grid.RowDefinitions>
+								<RowDefinition Height="Auto"/>
+								<RowDefinition Height="*"/>
+							</Grid.RowDefinitions>
+							<Border Grid.Row="0" Grid.RowSpan="2"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="4"
+                                    Margin="0,8,0,0" />
+							<Border Grid.Row="0" Margin="10,0,0,0" HorizontalAlignment="Left"
+                                    Background="{Binding Background, RelativeSource={RelativeSource AncestorType=Window}}">
+								<ContentPresenter ContentSource="Header" RecognizesAccessKey="True" Margin="4,0"/>
+							</Border>
+							<ContentPresenter Grid.Row="1" Margin="{TemplateBinding Padding}"/>
+						</Grid>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+	</Window.Resources>
+
+	<Grid Margin="20">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="Auto"/>
+		</Grid.RowDefinitions>
+
+		<StackPanel Grid.Row="0">
+			<TextBlock Text="Default project path"/>
+			<Grid Margin="0,5,0,0">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="Auto"/>
+				</Grid.ColumnDefinitions>
+				<TextBox Grid.Column="0" Tag="Enter default project path"/>
+				<Button Grid.Column="1" Content="Browse" Style="{StaticResource ActionButtonStyle}" Margin="10,0,0,0"/>
+			</Grid>
+
+			<TextBlock Text="User camera DB location" Margin="0,15,0,0"/>
+			<Grid Margin="0,5,0,5">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="Auto"/>
+				</Grid.ColumnDefinitions>
+				<TextBox Grid.Column="0" Tag="Enter camera DB location"/>
+				<Button Grid.Column="1" Content="Browse" Style="{StaticResource ActionButtonStyle}" Margin="10,0,0,0"/>
+			</Grid>
+
+			<GroupBox Header="Mouse button assignment" Style="{StaticResource CustomGroupBoxStyle}">
+				<StackPanel>
+					<RadioButton GroupName="MouseButtons" Content="Middle mouse button: Zoom, Right mouse button: Move" IsChecked="True"/>
+					<RadioButton GroupName="MouseButtons" Content="Middle mouse button: Move, Right mouse button: Zoom" Margin="0,8,0,0"/>
+				</StackPanel>
+			</GroupBox>
+
+			<GroupBox Header="Mouse wheel direction" Style="{StaticResource CustomGroupBoxStyle}">
+				<StackPanel>
+					<RadioButton GroupName="MouseWheel" Content="Mouse wheel up: Zoom in, Mouse wheel down: Zoom out" IsChecked="True"/>
+					<RadioButton GroupName="MouseWheel" Content="Mouse wheel up: Zoom out, Mouse wheel down: Zoom in" Margin="0,8,0,0"/>
+				</StackPanel>
+			</GroupBox>
+		</StackPanel>
+
+		<StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
+			<Button Content="OK" Width="90" IsCancel="True" Style="{StaticResource ActionButtonStyle}"/>
+			<Button Content="Cancel" Width="90" Margin="10,0,0,0" IsCancel="True" Style="{StaticResource ActionButtonStyle}"/>
+		</StackPanel>
+	</Grid>
+</Window>

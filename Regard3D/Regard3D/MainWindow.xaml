@@ -1,0 +1,200 @@
+﻿<Window x:Class="Regard3D.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Regard3D"
+        mc:Ignorable="d"
+        Title="Regard3D" Height="650" Width="1100"
+        Background="#E8E8E8"
+        FontSize="14">
+
+    <Window.Resources>
+        <SolidColorBrush x:Key="AccentBrush" Color="#FF9B59B6"/>
+        <SolidColorBrush x:Key="BorderBrush" Color="#D0D0D0"/>
+
+        <Style x:Key="SliderThumbStyle" TargetType="Thumb">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Thumb">
+                        <Grid>
+                            <Ellipse x:Name="grip" Fill="{StaticResource AccentBrush}" Width="18" Height="18" Stroke="White" StrokeThickness="2"/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="grip" Property="Fill" Value="#B575D1"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="CustomSliderStyle" TargetType="Slider">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Slider">
+                        <Grid VerticalAlignment="Center">
+                            <Border x:Name="Track" Height="6" Background="#E0E0E0" CornerRadius="3"/>
+                            <Track x:Name="PART_Track">
+                                <Track.Thumb>
+                                    <Thumb Style="{StaticResource SliderThumbStyle}"/>
+                                </Track.Thumb>
+                            </Track>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="CustomGroupBoxStyle" TargetType="GroupBox">
+            <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="10,10,10,5"/>
+            <Setter Property="Margin" Value="0,0,0,15"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="GroupBox">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Border Grid.Row="1" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="4" Background="White"/>
+                            <Border Margin="10,-5,0,5" HorizontalAlignment="Left" Background="Transparent">
+                                <ContentPresenter ContentSource="Header" RecognizesAccessKey="True" Margin="3,0"/>
+                            </Border>
+                            <ContentPresenter Grid.Row="1" Margin="{TemplateBinding Padding}"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="MainMenu_MenuItemStyle" TargetType="MenuItem">
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="MenuItem">
+                        <Grid>
+                            <Border x:Name="Bd" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}">
+                                <ContentPresenter ContentSource="Header" RecognizesAccessKey="True"/>
+                            </Border>
+
+                            <Popup x:Name="PART_Popup"
+                           AllowsTransparency="true"
+                           Focusable="false"
+                           IsOpen="{Binding IsSubmenuOpen, RelativeSource={RelativeSource TemplatedParent}}"
+                           PopupAnimation="Fade"
+                           Placement="Bottom" 
+                           HorizontalOffset="-1">
+                                <Border x:Name="SubMenuBorder"
+                                Background="WhiteSmoke"
+                                BorderBrush="#D0D0D0"
+                                BorderThickness="1"
+                                Padding="2">
+                                    <StackPanel IsItemsHost="true" KeyboardNavigation.DirectionalNavigation="Cycle"/>
+                                </Border>
+                            </Popup>
+                        </Grid>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter TargetName="Bd" Property="Background" Value="#DCDCDC"/>
+                            </Trigger>
+                            <Trigger Property="IsSubmenuOpen" Value="true">
+                                <Setter TargetName="Bd" Property="Background" Value="#D0D0D0"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="250"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="280"/>
+        </Grid.ColumnDefinitions>
+
+        <Menu Grid.Row="0" Grid.ColumnSpan="3" Padding="5,0" Background="#F0F0F0" FontSize="14">
+            <MenuItem Header="_File" Style="{StaticResource MainMenu_MenuItemStyle}" Click="CreateNewProject_Click"/>
+            <MenuItem Header="_Options" Style="{StaticResource MainMenu_MenuItemStyle}">
+                <MenuItem Header="Properties" Click="OpenProperties_Click"/>
+                <MenuItem Header="User-defined camera DB" Click="OpenCameraDB_Click"/>
+            </MenuItem>
+            <MenuItem Header="_View" Style="{StaticResource MainMenu_MenuItemStyle}" Click="OpenConsoleOutput_Click"/>
+            <MenuItem Header="_Help" Style="{StaticResource MainMenu_MenuItemStyle}" Click="OpenAbout_Click"/>
+        </Menu>
+        <Border Grid.Row="0" Grid.ColumnSpan="3" Height="1.2" Background="DarkGray" VerticalAlignment="Bottom"/>
+
+        <Border Grid.Row="1" Grid.Column="0" Padding="10,15" Background="WhiteSmoke">
+            <DockPanel>
+                <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" Margin="5">
+                    <Button Width="38" Height="38" Margin="0,0,8,0" Background="White" BorderThickness="1" Click="CreateNewProject_Click">
+                        <Image Source="Icons/new_file.png" Margin="5"/>
+                    </Button>
+                    <Button Width="38" Height="38" Background="White" BorderThickness="1">
+                        <Image Source="Icons/folder.png" Margin="4"/>
+                    </Button>
+                </StackPanel>
+                <Border BorderBrush="Gray" BorderThickness="1" Margin="5,15,5,5" Height="400" VerticalAlignment="Top" Background="White"/>
+            </DockPanel>
+        </Border>
+
+        <Border Grid.Row="1" Grid.Column="0" Width="1.2" Background="DarkGray" HorizontalAlignment="Right"/>
+        <Border Grid.Row="1" Grid.Column="1" Width="1.2" Background="DarkGray" HorizontalAlignment="Right"/>
+
+        <Border Grid.Row="1" Grid.Column="1" Margin="15" BorderBrush="DarkGray" BorderThickness="1" Background="White"/>
+
+        <Border Grid.Row="1" Grid.Column="2" Padding="15" Background="WhiteSmoke">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel>
+                        <TextBlock Text="3D View Controls" FontWeight="Bold" FontSize="16" Margin="0,0,-2,15" Padding="10,0,0,0"/>
+
+                        <Border BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="10" Background="White" Margin="0,0,0,15">
+                            <StackPanel>
+                                <CheckBox Content="Show trackball" IsChecked="True" Margin="0,0,0,10" VerticalContentAlignment="Center"/>
+                                <TextBlock Text="Point size" Margin="0,5,0,5"/>
+                                <Slider Style="{StaticResource CustomSliderStyle}" Minimum="1" Maximum="10" Value="5" Margin="0,0,0,10"/>
+                                <CheckBox Content="Show texture" IsChecked="True" Margin="0,5,0,5" VerticalContentAlignment="Center"/>
+                                <CheckBox Content="Enable lighting" IsChecked="True" VerticalContentAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+
+                        <GroupBox Header="Polygon mode" Style="{StaticResource CustomGroupBoxStyle}" FontWeight="SemiBold">
+                            <StackPanel>
+                                <RadioButton Content="Fill" IsChecked="True" GroupName="PolygonMode" Margin="5,0,0,5"/>
+                                <RadioButton Content="Line" GroupName="PolygonMode" Margin="5,0,0,5"/>
+                                <RadioButton Content="Point" GroupName="PolygonMode" Margin="5,0,0,0"/>
+                            </StackPanel>
+                        </GroupBox>
+
+                        <GroupBox Header="Shading model" Style="{StaticResource CustomGroupBoxStyle}" FontWeight="SemiBold">
+                            <StackPanel>
+                                <RadioButton Content="Smooth" IsChecked="True" GroupName="ShadingModel" Margin="5,0,0,5"/>
+                                <RadioButton Content="Flat" GroupName="ShadingModel" Margin="5,0,0,0"/>
+                            </StackPanel>
+                        </GroupBox>
+
+                    </StackPanel>
+                </ScrollViewer>
+
+                <Button Grid.Row="1" Content="Reset orientation" Style="{StaticResource ActionButtonStyle}"/>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

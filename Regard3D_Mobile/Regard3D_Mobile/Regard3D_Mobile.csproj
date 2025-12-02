@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="icons\placeholder.png" />
+    <None Remove="icons\settings.png" />
+    <None Remove="icons\switch-camera.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="icons\placeholder.png" />
+    <Resource Include="icons\settings.png" />
+    <Resource Include="icons\switch-camera.png" />
+  </ItemGroup>
+
+</Project>

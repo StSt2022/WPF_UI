@@ -1,0 +1,201 @@
+﻿<Window x:Class="Regard3D_Mobile.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Regard3D_Mobile"
+        mc:Ignorable="d"
+        Title="Mobile Preview" Height="700" Width="350"
+        WindowStartupLocation="CenterOwner"
+        WindowStyle="None" AllowsTransparency="True"
+        Background="Transparent"
+        MouseLeftButtonDown="DragWindow"
+        FontSize="14">
+
+    <Window.Resources>
+        <Style x:Key="RoundButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#ABADB3"/>
+            <Setter Property="BorderThickness" Value="1.5"/>
+            <Setter Property="Padding" Value="15,10"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Bd" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="22">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="#F0F0F0"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="#E0E0E0"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="TextBox">
+            <Setter Property="MinHeight" Value="44"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="5,0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Grid>
+                            <Border x:Name="border" BorderBrush="#ABADB3" BorderThickness="1" Background="White" CornerRadius="22"/>
+                            <ScrollViewer x:Name="PART_ContentHost" Margin="15,0"/>
+                            <TextBlock x:Name="Placeholder" Text="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}"
+                                       Foreground="Gray" Margin="15,0" VerticalAlignment="Center"
+                                       Visibility="Collapsed" IsHitTestVisible="False" HorizontalAlignment="Center"/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="Text" Value=""/>
+                                </MultiTrigger.Conditions>
+                                <Setter TargetName="Placeholder" Property="Visibility" Value="Visible"/>
+                            </MultiTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Border Background="#F5F5F5" CornerRadius="30" BorderBrush="#CCCCCC" BorderThickness="1" Padding="5">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <Border Grid.Row="0" Background="White" CornerRadius="25,25,0,0" Padding="15">
+                <TextBlock Text="Picture set" FontSize="18" FontWeight="SemiBold" HorizontalAlignment="Center"/>
+            </Border>
+
+            <DockPanel Grid.Row="1" Margin="15">
+                <StackPanel DockPanel.Dock="Bottom">
+                    <TextBox Tag="Picture set name" Margin="0,15,0,10"/>
+                    <Button Content="Clear file list" Style="{StaticResource RoundButtonStyle}"/>
+                </StackPanel>
+
+                <TextBlock DockPanel.Dock="Top" Text="Image list" FontSize="16" Margin="0,0,0,10" HorizontalAlignment="Center"/>
+                <Grid DockPanel.Dock="Top">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="0" Content="Add from gallery" Style="{StaticResource RoundButtonStyle}" Margin="0,0,5,0" Click="OpenGallery_Click"/>
+                    <Button Grid.Column="1" Content="Take a photo" Style="{StaticResource RoundButtonStyle}" Margin="5,0,0,0" Click="OpenCamera_Click"/>
+                </Grid>
+
+                <ListBox Margin="0,15,0,0" BorderThickness="1.5" BorderBrush="#CCCCCC"
+                         ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="ListBoxItem">
+                            <Setter Property="Padding" Value="0,5"/>
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+
+                    <ListBoxItem>
+                        <StackPanel>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Expander x:Name="Expander1" Grid.Column="0" Header="Picture 1" VerticalAlignment="Center"/>
+                                <Button Grid.Column="1" Content="View image info" Style="{StaticResource RoundButtonStyle}" Margin="5,0" Click="OpenImageInfo_Click" CommandParameter="1"/>
+                            </Grid>
+                            <Border Margin="5,0,5,5" Height="120" Background="Transparent" CornerRadius="10">
+                                <Border.Style>
+                                    <Style TargetType="Border">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding ElementName=Expander1, Path=IsExpanded}" Value="True">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
+                                <Image Source="/Icons/placeholder.png" Stretch="Uniform" Width="80" HorizontalAlignment="Center"/>
+                            </Border>
+                        </StackPanel>
+                    </ListBoxItem>
+
+                    <ListBoxItem>
+                        <StackPanel>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Expander x:Name="Expander2" Grid.Column="0" Header="Picture 2" VerticalAlignment="Center"/>
+                                <Button Grid.Column="1" Content="View image info" Style="{StaticResource RoundButtonStyle}" Margin="5,0" Click="OpenImageInfo_Click" CommandParameter="2"/>
+                            </Grid>
+                            <Border Margin="5,0,5,5" Height="120" Background="Transparent" CornerRadius="10">
+                                <Border.Style>
+                                    <Style TargetType="Border">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding ElementName=Expander2, Path=IsExpanded}" Value="True">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
+                                <Image Source="/Icons/placeholder.png" Stretch="Uniform" Width="80" HorizontalAlignment="Center"/>
+                            </Border>
+                        </StackPanel>
+                    </ListBoxItem>
+
+                    <ListBoxItem>
+                        <StackPanel>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Expander x:Name="Expander3" Grid.Column="0" Header="Picture 3" VerticalAlignment="Center"/>
+                                <Button Grid.Column="1" Content="View image info" Style="{StaticResource RoundButtonStyle}" Margin="5,0" Click="OpenImageInfo_Click" CommandParameter="3"/>
+                            </Grid>
+                            <Border Margin="5,0,5,5" Height="120" Background="Transparent" CornerRadius="10">
+                                <Border.Style>
+                                    <Style TargetType="Border">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding ElementName=Expander3, Path=IsExpanded}" Value="True">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
+                                <Image Source="/Icons/placeholder.png" Stretch="Uniform" Width="80" HorizontalAlignment="Center"/>
+                            </Border>
+                        </StackPanel>
+                    </ListBoxItem>
+
+                </ListBox>
+            </DockPanel>
+
+            <Border Grid.Row="2" Background="#E0E0E0" CornerRadius="0,0,25,25" Padding="12">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Path Grid.Column="0" Data="M0.5,0.5 L9.5,0.5 L9.5,9.5 L0.5,9.5 Z" Stretch="Uniform" Stroke="Gray" StrokeThickness="1.5" Width="16" Height="16"/>
+                    <TextBlock Grid.Column="1" Text="○" HorizontalAlignment="Center" FontSize="24" Foreground="Gray" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Column="2" Text="◁" HorizontalAlignment="Center" FontSize="22" Foreground="Gray" VerticalAlignment="Center"/>
+                </Grid>
+            </Border>
+        </Grid>
+    </Border>
+</Window>

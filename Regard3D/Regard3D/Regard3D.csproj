@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Icons\folder.png" />
+    <None Remove="Icons\new_file.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Icons\folder.png" />
+    <Resource Include="Icons\new_file.png" />
+  </ItemGroup>
+
+</Project>
